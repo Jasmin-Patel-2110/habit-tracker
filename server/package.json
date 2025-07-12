@@ -2,7 +2,7 @@
   "name": "habit-tracker-server",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "CommonJS",
   "main": "dist/app.js",
   "scripts": {
     "dev": "tsx watch src/app.ts",
