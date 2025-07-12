@@ -33,7 +33,7 @@ app.use(express.json());
 app.use('/api/habits', habitRoutes);
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (req: express.Request, res: express.Response) => {
   res.json({ status: 'OK', message: 'Habit Tracker API is running' });
 });
 
