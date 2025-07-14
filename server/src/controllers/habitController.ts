@@ -46,6 +46,11 @@ export const getAllHabits = async (
   try {
     const habits = await Habit.find().sort({ createdAt: -1 });
 
+    if (!habits) {
+      res.status(404).json({ error: 'No habits found' });
+      return;
+    }
+
     // Add streak data to each habit
     const habitsWithStreaks = habits.map(habit => {
       const streakData = calculateStreak(habit.logs);
