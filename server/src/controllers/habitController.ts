@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { Habit, IHabit } from '../models/Habit';
 import { calculateStreak } from '../utils/streak';
+import { AuthRequest } from '../middleware/auth';
 
 // Create a new habit
 export const createHabit = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
@@ -28,6 +29,7 @@ export const createHabit = async (
       title: title.trim(),
       frequency,
       logs: [],
+      userId: req.user!._id,
     });
 
     const savedHabit = await habit.save();
@@ -40,11 +42,13 @@ export const createHabit = async (
 
 // Get all habits with their logs
 export const getAllHabits = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
-    const habits = await Habit.find().sort({ createdAt: -1 });
+    const habits = await Habit.find({ userId: req.user!._id }).sort({
+      createdAt: -1,
+    });
 
     if (!habits) {
       res.status(404).json({ error: 'No habits found' });
@@ -68,7 +72,10 @@ export const getAllHabits = async (
 };
 
 // Log a habit for a specific date (or today by default)
-export const logHabit = async (req: Request, res: Response): Promise<void> => {
+export const logHabit = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const { date, completed = true } = req.body;
@@ -91,7 +98,7 @@ export const logHabit = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Check if habit exists
-    const habit = await Habit.findById(id);
+    const habit = await Habit.findOne({ _id: id, userId: req.user!._id });
     if (!habit) {
       res.status(404).json({ error: 'Habit not found' });
       return;
@@ -126,7 +133,7 @@ export const logHabit = async (req: Request, res: Response): Promise<void> => {
 
 // Delete a habit
 export const deleteHabit = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
@@ -137,7 +144,10 @@ export const deleteHabit = async (
       return;
     }
 
-    const deletedHabit = await Habit.findByIdAndDelete(id);
+    const deletedHabit = await Habit.findOneAndDelete({
+      _id: id,
+      userId: req.user!._id,
+    });
 
     if (!deletedHabit) {
       res.status(404).json({ error: 'Habit not found' });
@@ -153,7 +163,7 @@ export const deleteHabit = async (
 
 // Get a single habit by ID
 export const getHabitById = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
@@ -164,7 +174,7 @@ export const getHabitById = async (
       return;
     }
 
-    const habit = await Habit.findById(id);
+    const habit = await Habit.findOne({ _id: id, userId: req.user!._id });
 
     if (!habit) {
       res.status(404).json({ error: 'Habit not found' });

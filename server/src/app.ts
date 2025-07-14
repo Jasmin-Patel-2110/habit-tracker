@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import habitRoutes from './routes/habitRoutes';
+import userRoutes from './routes/userRoutes';
+import { authenticate } from './middleware/auth';
 
 dotenv.config();
 
@@ -30,7 +32,8 @@ app.use(
 app.use(express.json());
 
 // API routes
-app.use('/api/habits', habitRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/habits', authenticate, habitRoutes);
 
 // Health check endpoint
 app.get('/health', (req: express.Request, res: express.Response) => {

@@ -90,16 +90,32 @@ const CalendarHeatmap: React.FC<CalendarHeatmapProps> = ({
         {/* Calendar squares */}
         {weeks.map((week, weekIndex) => (
           <React.Fragment key={weekIndex}>
-            {week.map((day, dayIndex) => (
-              <div
-                key={`${weekIndex}-${dayIndex}`}
-                className={clsx(
-                  "w-6 h-6 rounded-sm transition-colors duration-200 cursor-pointer hover:opacity-80",
-                  getDayColor(day)
-                )}
-                title={getDayTooltip(day)}
-              />
-            ))}
+            {week.map((day, dayIndex) => {
+              // Determine text color for best contrast
+              let textColor = "";
+              if (day.isToday && day.completed) {
+                textColor = "text-white";
+              } else if (day.completed) {
+                textColor = "text-white";
+              } else if (day.isToday && !day.completed) {
+                textColor = "text-blue-700 dark:text-blue-200 dark:bg-gray-800";
+              } else {
+                textColor = "text-gray-700 dark:text-gray-100 dark:bg-gray-800";
+              }
+              return (
+                <div
+                  key={`${weekIndex}-${dayIndex}`}
+                  className={clsx(
+                    "w-6 h-6 rounded-sm transition-colors duration-200 cursor-pointer hover:opacity-80 flex items-center justify-center text-[11px] font-semibold ",
+                    getDayColor(day),
+                    textColor
+                  )}
+                  title={getDayTooltip(day)}
+                >
+                  {new Date(day.date).getDate()}
+                </div>
+              );
+            })}
           </React.Fragment>
         ))}
       </div>

@@ -46,15 +46,15 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onHabitUpdated }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-4 sm:p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg hover:scale-[1.02] hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200 ease-in-out">
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-2">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
             {habit.title}
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 capitalize">
+            <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 capitalize">
               {habit.frequency}
             </span>
             {getStatusBadge()}
@@ -63,37 +63,43 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onHabitUpdated }) => {
       </div>
 
       {/* Streak Information */}
-      <div className="grid grid-cols-3 gap-4 mb-4 p-3 bg-gray-50 rounded-lg">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-3 sm:mb-4 p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
         <div className="text-center">
-          <div className="text-2xl font-bold text-blue-600">
+          <div className="text-lg sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             {habit.streakData.currentStreak}
           </div>
-          <div className="text-xs text-gray-600">Current Streak</div>
+          <div className="text-xs text-gray-600 dark:text-gray-300">
+            Current Streak
+          </div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-purple-600">
+          <div className="text-lg sm:text-2xl font-bold text-purple-600 dark:text-purple-400">
             {habit.streakData.longestStreak}
           </div>
-          <div className="text-xs text-gray-600">Longest Streak</div>
+          <div className="text-xs text-gray-600 dark:text-gray-300">
+            Longest Streak
+          </div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-green-600">
+          <div className="text-lg sm:text-2xl font-bold text-green-600 dark:text-green-400">
             {habit.streakData.totalCompleted}
           </div>
-          <div className="text-xs text-gray-600">Total Completed</div>
+          <div className="text-xs text-gray-600 dark:text-gray-300">
+            Total Completed
+          </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col sm:flex-row gap-2 mb-3 sm:mb-4">
         <button
           onClick={() => handleLogHabit(!isCompletedToday)}
           disabled={isLoading}
           className={clsx(
-            "flex-1 px-4 py-2 rounded-md font-medium transition-colors",
+            "w-full sm:flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-150 text-sm sm:text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer",
             isCompletedToday
-              ? "bg-red-500 hover:bg-red-600 text-white"
-              : "bg-green-500 hover:bg-green-600 text-white",
+              ? "bg-red-500 hover:bg-red-600 text-white dark:bg-red-700 dark:hover:bg-red-800"
+              : "bg-green-500 hover:bg-green-600 text-white dark:bg-green-700 dark:hover:bg-green-800",
             isLoading && "opacity-50 cursor-not-allowed"
           )}
         >
@@ -130,7 +136,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onHabitUpdated }) => {
 
         <button
           onClick={() => setShowHeatmap(!showHeatmap)}
-          className="px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md font-medium transition-colors"
+          className="w-full sm:w-auto px-4 py-2 text-gray-600 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm"
         >
           {showHeatmap ? "Hide" : "Show"} Calendar
         </button>
